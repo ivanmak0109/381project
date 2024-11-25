@@ -3,7 +3,9 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
-    session = require('express-session');
+    session = require('express-session'),
+    bcrypt = require('bcrypt')
+;
 const mongourl = 'mongodb+srv://makyuiming0109:makyuiming0109@cluster0.gkgj9.mongodb.net/381project?retryWrites=true&w=majority&appName=Cluster0'
 var {MongoClient, ServerApiVersion, ObjectId} = require("mongodb");
 const { default: mongoose, connection } = require('mongoose');
@@ -41,22 +43,34 @@ const loginSchema = new mongoose.Schema({
 
 const User = client.db(dbName).collection('account', loginSchema)
 
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-})
-passport.deserializeUser(async (id, done) => {
-    const user = await User.findById(id)
-    done(null, user)
-})
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+  
+passport.deserializeUser(function(user, done) {
+    done(null, user);
+});
 
-passport.use(new LocalStrategy(function (userid, password, done){
-    const existingUser = User.findOne({userid: userid})
-    if(existingUser && (existingUser.password == password)){
-        return done(null, existingUser);
-    }else{
-        return done(null, false);
+passport.use(new LocalStrategy(
+    {
+        usernameField: 'userid',
+        passportField: 'password',
+        passReqToCallback: true
+    },async(req, username, password, done)=>{
+        try{
+            const user = await User.findOne({userid: username})
+            if(!user){
+                return done(null, false)
+            }
+            if(password != user.password){
+                return done(null, false)
+            }
+            return done(null, user)
+        }catch(error){
+            return done(error)
+        }
     }
-})) 
+))
 
 function isLoggedIn(req, res, next){
     if (req.isAuthenticated()){
@@ -87,7 +101,7 @@ const handle_CreateAc = async (req, res) =>{
 
 const handle_DeleteAc = async (req, res) =>{
     await client.connect();
-    await User.deleteOne({userid: req.userid})
+    await User.deleteOne({userid: req.user.userid})
     res.redirect('/');
 }
 
@@ -106,7 +120,7 @@ app.post('/login', passport.authenticate('local', {
 )
 
 app.get('/home', isLoggedIn, (req, res) => {
-    res.render('home', {userid: req.body.userid})
+    res.render('home', {userid: req.user.userid})
 })
 
 app.get("/createAc", (req, res) =>{
@@ -119,6 +133,13 @@ app.post("/createAc", (req, res) =>{
 
 app.get('/deleteAc', async(req, res) =>{
     handle_DeleteAc(req, res)
+})
+
+app.get('/logout', function(req, res, next) {
+    req.logout(function(err) {
+      if (err) { return next(err); }
+      res.redirect('/login');
+    });
 })
 
 app.listen(3000)
