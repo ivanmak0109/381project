@@ -1,0 +1,30 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Bookings</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+    <body>
+		<H1>Welcome, <%= user.name %></H1>
+		<hr/>
+		<p>You logged in through <b><%= user.type %></b>, user ID is <%= user.id %></p>
+        <H2>Booking Details</H2><hr>
+        <p>Booking Name: <%= booking.bookingname %></i></p>
+        <p>Mobile: <%= booking.mobile %></p>
+        <p>Party size: <%= booking.size %></p>
+        <p>Date: <%= booking.date %></p>
+
+        <% if (booking.photo) { %>
+            <img src="data:image/jpg;base64, <%= booking.photo %>"><br>
+        <% } %>
+
+        <% if (booking.userid) { %>
+            <p><small>Created by User ID: <%= booking.userid %></small></p>
+        <% } %>
+        <br>
+        <a class="button" href="/edit?_id=<%= booking._id %>">edit</a><br>
+        <a class="button" href="/delete?_id=<%= booking._id %>">delete</a><br>
+        <a class="button" href="/">home</a>
+    </body>
+</html>
