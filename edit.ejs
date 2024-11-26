@@ -1,13 +1,25 @@
 <html>
     <body>
-		<H1>Welcome, <%= user.name %></H1>
-		<hr/>
-		<p>Welcome! <%= user.id %></p>
-        <form action="/update" method="POST" enctype="multipart/form-data">
-            Booking ID: <input name="bookingid" value=<%= booking.bookingid %>><br>
-            Mobile: <input name="mobile" value=<%= booking.mobile %> /><br>
-            <input type="hidden" name="_id" value=<%= booking._id %>>
-            <input type="submit" value="update">  
+        <h1>Welcome, <%= user.name %></h1>
+        <hr/>
+        <p>Welcome! <%= user.id %></p>
+        <form id="updateForm" action="/update" method="POST" enctype="multipart/form-data">
+            Booking ID: <input name="bookingid" value="<%= booking.bookingid %>"><br>
+            Mobile: <input name="mobile" value="<%= booking.mobile %>"><br>
+            <input type="hidden" name="_id" value="<%= booking._id %>">
+            <input type="submit" value="update" onclick="return confirmUpdate()">
         </form>
+        <script>
+            function confirmUpdate() {
+                if (confirm("Are you sure you want to update?")) {
+                    // Redirect to another page after confirmation
+                    window.location.href = "create.html"; // Replace with your desired URL
+                    return true;
+                } else {
+                    // Prevent form submission if not confirmed
+                    return false;
+                }
+            }
+        </script>
     </body>
 </html>
