@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="loginstyle.css">
+    
+    <title>Login</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <h5 class="error"><%= message %></h5>
+        <form action="/login" method="POST" onsubmit="return validateForm()">
+            User ID<input type="text" name="userid" required autocomplete="off"><br/>
+            Password<input type="password" name="password" required><br/>
+            <input type="submit" value="Login">
+        </form>
+        <p>Don't have an account? <a href="/createAc">Create account</a></p>
+    </div>
+    <script>
+        function validateForm() {
+            var userid = document.forms[0]["userid"].value;
+            var password = document.forms[0]["password"].value;
+            if (userid == "" || password == "") {
+                alert("User ID and Password must be filled out");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>
+
+
