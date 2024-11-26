@@ -1,25 +1,64 @@
 <html>
+    <head>
+    </head>
     <body>
         <h1>Welcome, <%= user.name %></h1>
         <hr/>
         <p>Welcome! <%= user.id %></p>
-        <form id="updateForm" action="/update" method="POST" enctype="multipart/form-data">
+        <form id="updateForm" action="/update" method="POST" enctype="multipart/form-data" onsubmit="return confirmUpdate()">
             Booking ID: <input name="bookingid" value="<%= booking.bookingid %>"><br>
             Mobile: <input name="mobile" value="<%= booking.mobile %>"><br>
             <input type="hidden" name="_id" value="<%= booking._id %>">
-            <input type="submit" value="update" onclick="return confirmUpdate()">
+            <input type="submit" value="update">
         </form>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Are you sure you want to update?</p>
+                <button id="confirmBtn">Yes</button>
+                <button id="cancelBtn">No</button>
+            </div>
+        </div>
+
         <script>
+            
+            var modal = document.getElementById("myModal");
+
+          
+            var confirmBtn = document.getElementById("confirmBtn");
+            var cancelBtn = document.getElementById("cancelBtn");
+
+           
             function confirmUpdate() {
-                if (confirm("Are you sure you want to update?")) {
-                    // Redirect to another page after confirmation
-                    window.location.href = "create.html"; // Replace with your desired URL
-                    return true;
-                } else {
-                    // Prevent form submission if not confirmed
-                    return false;
+                modal.style.display = "block";
+                return false; // Prevent form submission
+            }
+
+            
+            document.getElementsByClassName("close")[0].onclick = function() {
+                modal.style.display = "none";
+            }
+
+            
+            confirmBtn.onclick = function() {
+                modal.style.display = "none";
+                document.getElementById("updateForm").submit();
+                window.location.href = "/another-page"; // Replace with your desired URL
+            }
+
+           
+            cancelBtn.onclick = function() {
+                modal.style.display = "none";
+            }
+
+           
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
                 }
             }
         </script>
     </body>
 </html>
+
