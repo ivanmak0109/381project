@@ -8,6 +8,7 @@ var express = require('express'),
 const mongourl = 'mongodb+srv://makyuiming0109:makyuiming0109@cluster0.gkgj9.mongodb.net/381project?retryWrites=true&w=majority&appName=Cluster0'
 var {MongoClient, ServerApiVersion, ObjectId} = require("mongodb");
 const { default: mongoose, connection } = require('mongoose');
+const collectionName = "bookings";
 
 app.use(session({
     secret: 'your-secret-key',
@@ -42,6 +43,34 @@ const loginSchema = new mongoose.Schema({
 
 const User = client.db(dbName).collection('account', loginSchema)
 
+
+
+
+const bookingSchema = new mongoose.Schema({
+     bookingname: {
+        type: String,
+        require: true,
+        unique: true
+    },
+    mobile: {
+        type: String,
+        require: true
+        
+    },
+    size: {
+        type: String, 
+        require:true,
+        unique: true
+     },
+     date: {
+        type: String, 
+        require:true,
+       
+        }
+})
+
+const users = client.db(dbName).collection('booking',bookingSchema)
+
 passport.serializeUser(function(user, done) {
     done(null, user);
 });
@@ -71,6 +100,8 @@ passport.use(new LocalStrategy(
     }
 ))
 
+
+
 function isLoggedIn(req, res, next){
     if (req.isAuthenticated()){
         return next();
@@ -79,12 +110,26 @@ function isLoggedIn(req, res, next){
     }
 }
 
+const insertDocument = async (db, doc) => {
+    var collection = db.collection(collectionName);
+    let results = await collection.insertOne(doc);
+	console.log("insert one document:" + JSON.stringify(results));
+    return results;
+}
+
+const findDocument = async (db, criteria) => {
+    var collection = db.collection(collectionName);
+    let results = await collection.find(criteria).toArray();
+	console.log("find the documents:" + JSON.stringify(results));
+    return results;
+}
+
 const handle_CreateAc = async (req, res) =>{
     await client.connect()
     let message =""
     let newAc = {
         userid: req.body.userid,
-        password: req.body.password
+        password: req.body.password,
     }
     const existingUser = await User.findOne({userid: newAc.userid})
     if(existingUser){
@@ -96,6 +141,35 @@ const handle_CreateAc = async (req, res) =>{
     res.render('createAc', {message: message})
 }
 
+
+const handle_Createbooking = async (req, res) =>{
+    await client.connect()
+    let message = ""
+    
+    let newbooking = {
+           bookingname: req.body.bookingname,  
+           mobile:   req.body.mobile,
+           size: req.body.size,
+           
+    }
+    await users.insertOne(newbooking)
+        message = "Create Successful"
+    res.render('create', {message: message})
+}    
+      
+const handle_Details = async (req, res, criteria) => {
+		await client.connect();
+        const db = client.db(dbName);
+        let  details = {
+           bookingname: req.body.bookingname,  
+           mobile:   req.body.mobile,
+           size: req.body.size,
+}
+        const docs = await findDocument(db, details);  
+        res.render('detail', { booking: docs[0], user: req.user});
+        
+}
+        
 const handle_DeleteAc = async (req, res) =>{
     await client.connect();
     await User.deleteOne({userid: req.user.userid})
@@ -134,6 +208,19 @@ app.post("/createAc", (req, res) =>{
     handle_CreateAc(req, res);
 })
 
+
+app.get('/create',isLoggedIn, (req, res) =>{
+    res.render('create', {userid: req.user.userid})
+})
+
+app.post('/create', (req, res) =>{
+    handle_Createbooking(req, res);
+})
+
+app.get('/detail', (req, res) =>{
+    handle_Details(req, res, req.query.docs);
+});   
+    
 app.get('/deleteAc', async(req, res) =>{
     handle_DeleteAc(req, res)
 })
