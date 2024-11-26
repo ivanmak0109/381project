@@ -29,7 +29,7 @@
            
             function confirmUpdate() {
                 modal.style.display = "block";
-                return false; // Prevent form submission
+                return false; 
             }
 
             document.getElementsByClassName("close")[0].onclick = function() {
@@ -39,7 +39,7 @@
             confirmBtn.onclick = function() {
                 modal.style.display = "none";
                 document.getElementById("updateForm").submit();
-                window.location.href = "/home"; // Replace with your desired URL
+                window.location.href = "/home"; 
             }
 
             cancelBtn.onclick = function() {
