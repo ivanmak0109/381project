@@ -7,64 +7,27 @@
     <link rel="stylesheet" type="text/css" href="editstyle.css">
 </head>
 <body>
-    <div class="container">
-        <div class="image-section"></div>
-        <div class="form-section">
-            <div class="form-container">
-                <h2>Edit Booking</h2>
-                <form id="updateForm" action="/update" method="POST" enctype="multipart/form-data" onsubmit="return confirmUpdate()">
-    <label for="bookingid">Booking ID:</label>
-    <input type="text" id="bookingid" name="bookingid" value="<%= booking.bookingid %>"><br>
-    
-    <label for="mobile">Mobile:</label>
-    <input type="text" id="mobile" name="mobile" value="<%= booking.mobile %>"><br>
-    
-    <input type="hidden" name="_id" value="<%= booking._id %>">
-    <input type="submit" value="Update">
-</form>
-
-            </div>
+    <h1>Edit Booking</h1>
+    <form action="/update?_id=<%= booking._id %>" method="post">
+        <div>
+            <label for="bookingname">Booking Name:</label>
+            <input type="text" id="bookingname" name="bookingname" value="<%= booking.bookingname %>" required>
         </div>
-    </div>
-
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close">×</span>
-            <p>Are you sure you want to update?</p>
-            <button id="confirmBtn">Yes</button>
-            <button id="cancelBtn">No</button>
+        <div>
+            <label for="mobile">Mobile:</label>
+            <input type="text" id="mobile" name="mobile" value="<%= booking.mobile %>" required>
         </div>
-    </div>
-
-    <script>
-        var modal = document.getElementById("myModal");
-        var confirmBtn = document.getElementById("confirmBtn");
-        var cancelBtn = document.getElementById("cancelBtn");
-
-        function confirmUpdate() {
-            modal.style.display = "block";
-            return false; 
-        }
-
-        document.getElementsByClassName("close")[0].onclick = function() {
-            modal.style.display = "none";
-        }
-
-        confirmBtn.onclick = function() {
-            modal.style.display = "none";
-            document.getElementById("updateForm").submit();
-        }
-
-        cancelBtn.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
+        <div>
+            <label for="size">Size:</label>
+            <input type="text" id="size" name="size" value="<%= booking.size %>" required>
+        </div>
+        <div>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" value="<%= booking.date %>" required>
+        </div>
+        <button type="submit">Update Booking</button>
+    </form>
 </body>
 </html>
+
 
