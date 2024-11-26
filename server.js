@@ -3,8 +3,7 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
-    session = require('express-session'),
-    bcrypt = require('bcrypt')
+    session = require('express-session')
 ;
 const mongourl = 'mongodb+srv://makyuiming0109:makyuiming0109@cluster0.gkgj9.mongodb.net/381project?retryWrites=true&w=majority&appName=Cluster0'
 var {MongoClient, ServerApiVersion, ObjectId} = require("mongodb");
@@ -46,7 +45,7 @@ const User = client.db(dbName).collection('account', loginSchema)
 passport.serializeUser(function(user, done) {
     done(null, user);
 });
-  
+
 passport.deserializeUser(function(user, done) {
     done(null, user);
 });
@@ -80,23 +79,21 @@ function isLoggedIn(req, res, next){
     }
 }
 
-const createAc = async (doc) =>{
-    const existingUser = await User.findOne({userid: doc.userid})
-    if(existingUser){
-        
-    }else {
-        await User.insertOne(doc)
-    }
-}
-
 const handle_CreateAc = async (req, res) =>{
     await client.connect()
+    let message =""
     let newAc = {
         userid: req.body.userid,
         password: req.body.password
     }
-    await createAc(newAc)
-    res.redirect('/login')
+    const existingUser = await User.findOne({userid: newAc.userid})
+    if(existingUser){
+        message = "Existing user id, please use another"
+    }else {
+        await User.insertOne(newAc)
+        message = "Create Successful"
+    }
+    res.render('createAc', {message: message})
 }
 
 const handle_DeleteAc = async (req, res) =>{
@@ -106,25 +103,31 @@ const handle_DeleteAc = async (req, res) =>{
 }
 
 app.get('/',(req, res) => {
-    res.render('login')
+    res.render('login', {message: ""})
 })
 
 app.get('/login', (req, res) => {
-    res.render('login')
+    res.render('login', {message: ""})
 })
 
-app.post('/login', passport.authenticate('local', {
-    successRedirect: '/home',
-    failureRedirect: '/login'
-    })
-)
+app.post('/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (!user) {
+            let message = "Invalid user id or password"
+            return res.render('login', {message: message});
+        }
+        req.logIn(user, (err) => {
+            return res.render('home', {userid: req.user.userid});
+        });
+    })(req, res, next);
+});
 
 app.get('/home', isLoggedIn, (req, res) => {
     res.render('home', {userid: req.user.userid})
 })
 
 app.get("/createAc", (req, res) =>{
-    res.render('createAc')
+    res.render('createAc', {message: ""})
 })
 
 app.post("/createAc", (req, res) =>{
