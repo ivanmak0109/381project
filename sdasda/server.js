@@ -7,6 +7,7 @@ var express = require('express'),
     path = require('path')
 ;
 const mongourl = 'mongodb+srv://makyuiming0109:makyuiming0109@cluster0.gkgj9.mongodb.net/381project?retryWrites=true&w=majority&appName=Cluster0'
+const { ALL } = require('dns');
 var {MongoClient, ServerApiVersion, ObjectId} = require("mongodb");
 const { default: mongoose, connection } = require('mongoose');
 
@@ -136,7 +137,7 @@ const handle_Createbooking = async (req, res) =>{
 
 const handle_Display = async (req, res) =>{
     await client.connect()
-    let docs = Booking.find().toArray
+    let docs = await Booking.find().toArray()
     res.render('home', {userid: req.user.userid, nBookings: docs.length, bookings: docs})
 }
 

@@ -22,7 +22,7 @@
             <% if (bookings && bookings.length > 0) { %>
                 <% for (var b of bookings) { %>
                     <li>Booking ID: 
-                        <a href="/details?_id=<%= b._id %>"><%= b.bookingname || 'No Name Available' %></a>
+                        <a href="/details?_id=<%= b._id %>"><%= b.bookingname %></a>
                     </li>
                 <% } %>
             <% } else { %>
