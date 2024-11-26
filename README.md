@@ -49,20 +49,28 @@ User need to register again
 
 Create 
 ```bash
-curl -X POST -H <br/>
-curl -X POST -F <br/>
+curl -X POST http://localhost:3000/api/booking/Daniel -H "Content-Type: application/json" -d '{
+  "mobile": "1234567890",
+  "size": "2",
+  "date": "2024-11-27"
+}'
 ```
 Read
 ```bash
-curl -X GET
+curl -X GET http://localhost:3000/api/booking/Daniel
 ```
 Update
 ```bash
-curl -X PUT -H
+curl -X PUT http://localhost:3000/api/booking/Daniel -H "Content-Type: application/json" -d '{
+  "bookingname": "daniel88",
+  "mobile": "0987654321",
+  "size": "3",
+  "date": "2024-12-01"
+}'
 ```
 Delete
 ```bash
-curl -X DELETE
+curl -X DELETE http://localhost:3000/api/booking/daniel88
 ```
 
 
