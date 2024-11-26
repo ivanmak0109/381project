@@ -182,6 +182,7 @@ app.get('/details', isLoggedIn, async (req, res) => {
         res.send('An error occurred');
     }
 });
+
 app.get('/edit', isLoggedIn, async (req, res) => {
     try {
         await client.connect();
@@ -197,6 +198,7 @@ app.get('/edit', isLoggedIn, async (req, res) => {
         res.send('An error occurred');
     }
 });
+
 app.post('/update', isLoggedIn, async (req, res) => {
     try {
         await client.connect();
@@ -220,11 +222,17 @@ app.post('/update', isLoggedIn, async (req, res) => {
     }
 });
 
-
-
-
-
-
+app.get('/delete', isLoggedIn, async (req, res) => {
+    try {
+        await client.connect();
+        const bookingId = req.query._id;
+        Booking.deleteOne({ _id: new ObjectId(bookingId) })
+        res.redirect('/home');
+    } catch (error) {
+        console.error(error);
+        res.send('An error occurred');
+    }
+});
 
 app.get('/home', isLoggedIn, (req, res) => {
     handle_Display(req, res)
@@ -258,4 +266,3 @@ app.get('/logout', function(req, res, next) {
 })
 
 app.listen(3000)
-
