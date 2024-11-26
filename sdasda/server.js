@@ -167,6 +167,65 @@ app.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
+app.get('/details', isLoggedIn, async (req, res) => {
+    try {
+        await client.connect();
+        const bookingId = req.query._id;
+        const booking = await Booking.findOne({ _id: new ObjectId(bookingId) });
+        if (booking) {
+            res.render('detail', { user: req.user, booking: booking });
+        } else {
+            res.send('Booking not found');
+        }
+    } catch (error) {
+        console.error(error);
+        res.send('An error occurred');
+    }
+});
+app.get('/edit', isLoggedIn, async (req, res) => {
+    try {
+        await client.connect();
+        const bookingId = req.query._id;
+        const booking = await Booking.findOne({ _id: new ObjectId(bookingId) });
+        if (booking) {
+            res.render('edit', { user: req.user, booking: booking });
+        } else {
+            res.send('Booking not found');
+        }
+    } catch (error) {
+        console.error(error);
+        res.send('An error occurred');
+    }
+});
+app.post('/update', isLoggedIn, async (req, res) => {
+    try {
+        await client.connect();
+        const bookingId = req.body._id;
+        console.log('Received Booking ID:', bookingId);
+        const updatedBooking = {
+            bookingid: req.body.bookingid,
+            mobile: req.body.mobile
+        };
+        console.log('Updated Booking Data:', updatedBooking);
+        const result = await Booking.updateOne({ _id: new ObjectId(bookingId) }, { $set: updatedBooking });
+        console.log('Update Result:', result);
+        if (result.modifiedCount > 0) {
+            res.redirect('/home');
+        } else {
+            res.send('No changes were made to the booking');
+        }
+    } catch (error) {
+        console.error(error);
+        res.send('An error occurred while updating the booking');
+    }
+});
+
+
+
+
+
+
+
 app.get('/home', isLoggedIn, (req, res) => {
     handle_Display(req, res)
 })
@@ -199,3 +258,4 @@ app.get('/logout', function(req, res, next) {
 })
 
 app.listen(3000)
+
