@@ -10,10 +10,10 @@
         <div class="form-section">
             <div class="form-container">
                 <h2>Booking detail </h2>
-                <form>
+                <form action="/create" method="POST">
                     <input type="text" name="bookingname" placeholder="Your Name" required>
                     <input type="tel" name="mobile" placeholder="Phone Number" required>
-                    <select name="size" required>
+                    <select type= "Number" name="size" required>
                         <option value="" disabled selected>Select Size</option>
                         <option value="1">1 people</option>
                         <option value="2">2 people</option>
@@ -21,11 +21,12 @@
                         <option value="4">4 people</option>
                     </select>
                     <input type="date" name="date" value="2024-11-27" min="2024-01-01" max="2025-11-27"/><br>
-                    
                   <input type="submit" value="create">
                 </form>
             </div>
         </div>
     </div>
+    <a href="/home">home</a>
+    <p><%= message%></p>
 </body>
 </html>
