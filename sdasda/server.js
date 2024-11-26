@@ -8,8 +8,10 @@ var express = require('express'),
 ;
 const mongourl = 'mongodb+srv://makyuiming0109:makyuiming0109@cluster0.gkgj9.mongodb.net/381project?retryWrites=true&w=majority&appName=Cluster0'
 const { ALL } = require('dns');
-var {MongoClient, ServerApiVersion, ObjectId} = require("mongodb");
+var {MongoClient, ServerApiVersion} = require("mongodb");
+const{ObjectId} =require('mongodb')
 const { default: mongoose, connection } = require('mongoose');
+const collectionName = "booking";
 
 app.use(session({
     secret: 'your-secret-key',
@@ -27,8 +29,11 @@ const client = new MongoClient(mongourl, {
     serverApi: {
         version: ServerApiVersion.v1,
         strict: false,
-        deprecationErrors: false
+        deprecationErrors: false,
+        useNewUrlParser: true, 
+        useUnifiedTopology: true
     }
+     
 })
 
 const loginSchema = new mongoose.Schema({
@@ -182,7 +187,6 @@ app.get('/details', isLoggedIn, async (req, res) => {
         res.send('An error occurred');
     }
 });
-
 app.get('/edit', isLoggedIn, async (req, res) => {
     try {
         await client.connect();
@@ -199,40 +203,31 @@ app.get('/edit', isLoggedIn, async (req, res) => {
     }
 });
 
+
 app.post('/update', isLoggedIn, async (req, res) => {
     try {
         await client.connect();
-        const bookingId = req.body._id;
-        console.log('Received Booking ID:', bookingId);
-        const updatedBooking = {
-            bookingid: req.body.bookingid,
-            mobile: req.body.mobile
+        const bookingId = new ObjectId(req.query._id);
+        let updatedBooking = {
+            bookingname: req.body.bookingname,
+            mobile: req.body.mobile,
+            size: req.body.size,
+            date: req.body.date
         };
         console.log('Updated Booking Data:', updatedBooking);
-        const result = await Booking.updateOne({ _id: new ObjectId(bookingId) }, { $set: updatedBooking });
-        console.log('Update Result:', result);
+        const result = await Booking.updateOne({ _id: bookingId }, { $set: updatedBooking });
         if (result.modifiedCount > 0) {
             res.redirect('/home');
         } else {
-            res.send('No changes were made to the booking');
+            res.send('No changes were made to the booking.');
         }
     } catch (error) {
         console.error(error);
-        res.send('An error occurred while updating the booking');
+        res.send('An error occurred while updating the booking.');
     }
 });
 
-app.get('/delete', isLoggedIn, async (req, res) => {
-    try {
-        await client.connect();
-        const bookingId = req.query._id;
-        Booking.deleteOne({ _id: new ObjectId(bookingId) })
-        res.redirect('/home');
-    } catch (error) {
-        console.error(error);
-        res.send('An error occurred');
-    }
-});
+
 
 app.get('/home', isLoggedIn, (req, res) => {
     handle_Display(req, res)
@@ -265,4 +260,135 @@ app.get('/logout', function(req, res, next) {
     });
 })
 
-app.listen(3000)
+const insertDocument = async (db, doc) => {
+    var collection = db.collection(collectionName);
+    let results = await collection.insertOne(doc);
+	console.log("insert one document:" + JSON.stringify(results));
+    return results;
+}
+
+const findDocument = async (db, criteria) => {
+    var collection = db.collection(collectionName);
+    let results = await collection.find(criteria).toArray();
+	console.log("find the documents:" + JSON.stringify(results));
+    return results;
+}
+const updateDocument = async (db, criteria, updateData) => {
+    var collection = db.collection(collectionName);
+    let results = await collection.updateOne(criteria, { $set: updateData });
+	console.log("update one document:" + JSON.stringify(results));
+    return results;
+}
+const deleteDocument = async (db, criteria) => {
+    var collection = db.collection(collectionName);
+    let results = await collection.deleteMany(criteria);
+	console.log("delete one document:" + JSON.stringify(results));
+    return results;
+}
+app.use(bodyParser.json());
+
+
+
+// Connect to MongoDB
+client.connect(err => {
+    if (err) throw err;
+    console.log('Connected to MongoDB');
+    const db = client.db(dbName);
+    const bookingsCollection = db.collection('booking')});
+    
+
+    
+    // Create (POST)
+/* RESTful */
+// Task 3
+app.post('/api/booking/:bookingname', async (req, res) => { //async programming way
+    if (req.params.bookingname) {
+        console.log(req.body);
+        await client.connect();
+        console.log("Connected successfully to server");
+        const db = client.db(dbName);
+        let newDoc = {
+            bookingname: req.params.bookingname,
+            mobile: req.body.mobile,
+            size: req.body.size,
+            date: req.body.date
+        };
+        if (req.files && req.files.filetoupload && req.files.filetoupload.size > 0) {
+            const data = await fsPromises.readFile(req.files.filetoupload.path);
+            newDoc.photo = Buffer.from(data).toString('base64');
+        }
+        await insertDocument(db, newDoc);
+        res.status(200).json({ "Successfully inserted": newDoc }).end();
+    } else {
+        res.status(500).json({ "error": "missing bookingname" });
+    }
+});
+
+app.get('/api/booking/:bookingname', async (req, res) => {
+    if (req.params.bookingname) {
+        console.log(req.body);
+        let criteria = {};
+        criteria['bookingname'] = req.params.bookingname;
+        await client.connect();
+        console.log("Connected successfully to server");
+        const db = client.db(dbName);
+        const docs = await findDocument(db, criteria);
+        res.status(200).json(docs);
+    } else {
+        res.status(500).json({ "error": "missing bookingname" }).end();
+    }
+});
+
+app.put('/api/booking/:bookingname', async (req, res) => {
+    if (req.params.bookingname) {
+        console.log(req.body);
+        let criteria = {};
+        criteria['bookingname'] = req.params.bookingname;
+        await client.connect();
+        console.log("Connected successfully to server");
+        const db = client.db(dbName);
+        let updateData = {
+            bookingname: req.body.bookingname || req.params.bookingname,
+            mobile: req.body.mobile,
+            size: req.body.size,
+            date: req.body.date
+        };
+
+        if (req.files && req.files.filetoupload && req.files.filetoupload.size > 0) {
+            const data = await fsPromises.readFile(req.files.filetoupload.path);
+            updateData.photo = Buffer.from(data).toString('base64');
+        }
+
+        const results = await updateDocument(db, criteria, updateData);
+        res.status(200).json(results).end();
+    } else {
+        res.status(500).json({ "error": "missing bookingname" });
+    }
+});
+
+app.delete('/api/booking/:bookingname', async (req, res) => {
+    if (req.params.bookingname) {
+        console.log(req.body);
+        let criteria = {};
+        criteria['bookingname'] = req.params.bookingname;
+        await client.connect();
+        console.log("Connected successfully to server");
+        const db = client.db(dbName);
+        const results = await deleteDocument(db, criteria);
+        console.log(results);
+        res.status(200).json(results).end();
+    } else {
+        res.status(500).json({ "error": "missing bookingname" });
+    }
+});
+
+
+/* End of Restful */
+
+app.get('/*', (req,res) => {
+    res.status(404).render('info', {message: `${req.path} - Unknown request!` });
+});
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+
