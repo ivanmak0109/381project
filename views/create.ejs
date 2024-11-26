@@ -1,6 +1,6 @@
 <head>
     <meta charset="UTF-8">
-  <link rel="stylesheet" href="/css/createstyle.css">
+  <link rel="stylesheet" href="/createstyle.css">
     <title>Booking</title>
     
 </head>
@@ -10,6 +10,7 @@
         <div class="form-section">
             <div class="form-container">
                 <h2>New Booking</h2>
+                <p><%= message%></p>
                 <form action="/create" method="POST">
                     <input type="text" name="bookingname" placeholder="Your Name" required>
                     <input type="tel" name="mobile" placeholder="Phone Number" required>
@@ -27,6 +28,5 @@
             </div>
         </div>
     </div>
-    <p><%= message%></p>
 </body>
 </html>

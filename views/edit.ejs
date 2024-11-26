@@ -1,57 +1,32 @@
-<html>
-    <head>
-  <link rel="stylesheet" type="text/css" href="updatestyle.css">
-    </head>
-    <body>
-        <h1>Welcome, <%= user.name %></h1>
-        <hr/>
-        <p>Welcome! <%= user.id %></p>
-        <form id="updateForm" action="/update" method="POST" enctype="multipart/form-data" onsubmit="return confirmUpdate()">
-            Booking ID: <input name="bookingid" value="<%= booking.bookingid %>"><br>
-            Mobile: <input name="mobile" value="<%= booking.mobile %>"><br>
-            <input type="hidden" name="_id" value="<%= booking._id %>">
-            <input type="submit" value="update">
-        </form>
-
-        <div id="myModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <p>Are you sure you want to update?</p>
-                <button id="confirmBtn">Yes</button>
-                <button id="cancelBtn">No</button>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Booking</title>
+    <link rel="stylesheet" type="text/css" href="editstyle.css">
+</head>
+<body>
+    <h1>Edit Booking</h1>
+    <form action="/update?_id=<%= booking._id %>" method="post">
+        <div>
+            <label for="bookingname">Booking Name:</label>
+            <input type="text" id="bookingname" name="bookingname" placeholder="<%= booking.bookingname %>" required>
         </div>
-
-        <script>
-            var modal = document.getElementById("myModal");
-            var confirmBtn = document.getElementById("confirmBtn");
-            var cancelBtn = document.getElementById("cancelBtn");
-
-           
-            function confirmUpdate() {
-                modal.style.display = "block";
-                return false; 
-            }
-
-            document.getElementsByClassName("close")[0].onclick = function() {
-                modal.style.display = "none";
-            }
-
-            confirmBtn.onclick = function() {
-                modal.style.display = "none";
-                document.getElementById("updateForm").submit();
-                window.location.href = "/home"; 
-            }
-
-            cancelBtn.onclick = function() {
-                modal.style.display = "none";
-            }
-
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
-        </script>
-    </body>
+        <div>
+            <label for="mobile">Mobile:</label>
+            <input type="text" id="mobile" name="mobile" placeholder="<%= booking.mobile %>" required>
+        </div>
+        <div>
+            <label for="size">Size:</label>
+            <input type="text" id="size" name="size" placeholder="<%= booking.size %>" required>
+        </div>
+        <div>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" placeholder="<%= booking.date %>" required>
+        </div>
+        <button type="submit">Update Booking</button>
+    </form>
+<a href="/home" style="background-color: yellow;">Home</a>
+</body>
 </html>

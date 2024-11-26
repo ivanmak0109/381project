@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome, <%= user.name %></h1>
+        <h1>Welcome, <%= user.userid %></h1>
         <hr/>
         <h2>Booking Details</h2>
         <hr/>
@@ -27,7 +27,6 @@
         <br>
         <a class="button" href="/edit?_id=<%= booking._id %>">Edit</a>
         <a class="button" href="/delete?_id=<%= booking._id %>">Delete</a>
-        <a class="button" href="/">Home</a>
     </div>
 </body>
 </html>
