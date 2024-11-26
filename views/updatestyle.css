@@ -47,7 +47,7 @@ body {
 }
 .image-section {
   flex: 1;
-  background-image: url('R.jpg'); /* Replace with your image URL */
+  background-image: url('R.jpg'); 
   background-size: cover;
   background-position: center;
   height: 100vh;
