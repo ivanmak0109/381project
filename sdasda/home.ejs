@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="homestyle.css">
     <title>Home Page</title>
-   
-   
 </head>
 <body>
     <div class="navbar">
@@ -19,10 +17,20 @@
     <div class="container">
         <h1>Welcome, <%= userid %></h1>
         <p>Manage your bookings easily and efficiently.</p>
+        <h2>Bookings (<%= nBookings %>)</h2>
+        <ul>
+            <% if (bookings && bookings.length > 0) { %>
+                <% for (var b of bookings) { %>
+                    <li>Booking ID: 
+                        <a href="/details?_id=<%= b._id %>"><%= b.bookingname || 'No Name Available' %></a>
+                    </li>
+                <% } %>
+            <% } else { %>
+                <li>No bookings available.</li>
+            <% } %>
+        </ul>
         <a href="/create" class="btn">Create Booking</a>
         <a href="/detail" class="btn">View Bookings</a>
     </div>
 </body>
 </html>
-
-
