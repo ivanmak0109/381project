@@ -17,7 +17,7 @@
         <h1>Welcome, <%= userid %></h1>
         <p>Manage your bookings easily and efficiently.</p>
         <form action="/search" method="POST">
-            Search by booking name: <input type="text" name= "search" required>
+            Search by booking name: <input type="text" name= "search" required autocomplete="off">
             <input type="submit" value="Search">
         </form>
         <h2>Bookings (<%= nBookings %>)</h2>

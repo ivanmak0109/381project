@@ -12,9 +12,9 @@
                 <h2>New Booking</h2>
                 <p><%= message%></p>
                 <form action="/create" method="POST">
-                    <input type="text" name="bookingname" placeholder="Your Name" required>
-                    <input type="tel" name="mobile" placeholder="Phone Number" required>
-                    <select type= "Number" name="size" required>
+                    <input type="text" name="bookingname" placeholder="Your Name" required autocomplete="off">
+                    <input type="tel" name="mobile" placeholder="Phone Number" required autocomplete="off">
+                    <select type= "Number" name="size" required autocomplete="off">
                         <option value="" disabled selected>Select Size</option>
                         <option value="1">1 people</option>
                         <option value="2">2 people</option>

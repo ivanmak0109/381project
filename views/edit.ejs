@@ -12,19 +12,25 @@
             <h1>Edit Booking</h1>
             <div>
                 <label for="bookingname">Booking Name:</label>
-                <input type="text" id="bookingname" name="bookingname" placeholder="<%= booking.bookingname %>" required>
+                <input type="text" id="bookingname" name="bookingname" placeholder="<%= booking.bookingname %>" autocomplete="off" required>
             </div>
             <div>
                 <label for="mobile">Mobile:</label>
-                <input type="text" id="mobile" name="mobile" placeholder="<%= booking.mobile %>" required>
+                <input type="text" id="mobile" name="mobile" placeholder="<%= booking.mobile %>" autocomplete="off" required>
             </div>
             <div>
                 <label for="size">Size:</label>
-                <input type="text" id="size" name="size" placeholder="<%= booking.size %>" required>
+                <select type= "Number" name="size" id="size" placeholder="<%= booking.size %>" required autocomplete="off">
+                    <option value="" disabled selected>Select Size</option>
+                    <option value="1">1 people</option>
+                    <option value="2">2 people</option>
+                    <option value="3">3 people</option>
+                    <option value="4">4 people</option>
+                </select>
             </div>
             <div>
                 <label for="date">Date:</label>
-                <input type="date" id="date" name="date" placeholder="<%= booking.date %>" required>
+                <input type="date" id="date" name="date" placeholder="<%= booking.date %>" autocomplete="off" required>
             </div>
             <button type="submit">Update Booking</button>
             <a href="/home">
