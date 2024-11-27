@@ -1,13 +1,15 @@
 # 381project (group no.6)
 
 ## Project info
-- Project name:
+- Project name: Restaurant Booking System
 - Student Name(sid): Mak Yui Ming(13666578)<br/>
                      Chan Tsz Yin(13398567)<br/>
                      Chan Kin Pan(13378267)<br/>
                      Lee Chun Yin(13360891)<br/>
 
 ## The cloud-based server URL
+
+https://three81project-group6.onrender.com
 
 ## Operation guides
 
@@ -26,10 +28,12 @@ User need to register again
 - After login, user will directly visit home page<br/>
 - the page will show "Welcome (userid)"
 - At the top include several functions
-  - Create booking
-  - Booking list
+  - Create booking (Have another button under the part of booking details)
   - Logout
   - Delete account
+- At the middle 
+  - Search function
+  - Booking list
  
 **4. Create booking**
 - User can insert their name, phone number, booking size and choose date
@@ -40,8 +44,19 @@ User need to register again
 - User can review their inserted details
 - User can edit or delete the inserted information by clicking the "edit" or "delete" button
 
+**6. Search booking**
+- User can search their booking after creating their booking details by typing their booking name
+
+**7. Logout**
+- User can click the Logout button to logout their account
+- Then will back to the login page
+
+**8. Delete account**
+- User can click the Delete account button to delete their account
+- Then will back to the login page and the account will be cleared
+
 **RESTful CRUD services**
-- We provide the RESTful CRUD services to the users
+- We provide the RESTful CRUD services 
   - Create
   - Read
   - Update
@@ -73,7 +88,7 @@ Delete
 curl -X DELETE http://localhost:3000/api/booking/daniel88
 ```
 
-https://three81project-group6.onrender.com
+
 
 
 
