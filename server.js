@@ -146,6 +146,12 @@ const handle_Display = async (req, res) =>{
     res.render('home', {userid: req.user.userid, nBookings: docs.length, bookings: docs})
 }
 
+const handle_Search = async (req, res) =>{
+    await client.connect()
+    let docs = await Booking.find( {bookingname: req.body.search}).toArray()
+    res.render('home', {userid: req.user.userid, nBookings: docs.length, bookings: docs})
+}
+
 const handle_DeleteAc = async (req, res) =>{
     await client.connect();
     await User.deleteOne({userid: req.user.userid})
@@ -241,6 +247,10 @@ app.get('/delete', isLoggedIn, async (req, res) => {
 
 app.get('/home', isLoggedIn, (req, res) => {
     handle_Display(req, res)
+})
+
+app.post('/search', isLoggedIn, (req, res) =>{
+    handle_Search(req, res)
 })
 
 app.get("/createAc",(req, res) =>{
