@@ -7,26 +7,30 @@
     <link rel="stylesheet" type="text/css" href="editstyle.css">
 </head>
 <body>
-    <h1>Edit Booking</h1>
-    <form action="/update?_id=<%= booking._id %>" method="post">
-        <div>
-            <label for="bookingname">Booking Name:</label>
-            <input type="text" id="bookingname" name="bookingname" placeholder="<%= booking.bookingname %>" required>
-        </div>
-        <div>
-            <label for="mobile">Mobile:</label>
-            <input type="text" id="mobile" name="mobile" placeholder="<%= booking.mobile %>" required>
-        </div>
-        <div>
-            <label for="size">Size:</label>
-            <input type="text" id="size" name="size" placeholder="<%= booking.size %>" required>
-        </div>
-        <div>
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" placeholder="<%= booking.date %>" required>
-        </div>
-        <button type="submit">Update Booking</button>
-    </form>
-<a href="/home" style="background-color: yellow;">Home</a>
+    <div class="form-container">
+        <form action="/update?_id=<%= booking._id %>" method="post">
+            <h1>Edit Booking</h1>
+            <div>
+                <label for="bookingname">Booking Name:</label>
+                <input type="text" id="bookingname" name="bookingname" placeholder="<%= booking.bookingname %>" required>
+            </div>
+            <div>
+                <label for="mobile">Mobile:</label>
+                <input type="text" id="mobile" name="mobile" placeholder="<%= booking.mobile %>" required>
+            </div>
+            <div>
+                <label for="size">Size:</label>
+                <input type="text" id="size" name="size" placeholder="<%= booking.size %>" required>
+            </div>
+            <div>
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" placeholder="<%= booking.date %>" required>
+            </div>
+            <button type="submit">Update Booking</button>
+            <a href="/home">
+                <button type="button" class="home-button">Home</button>
+            </a>
+        </form>
+    </div>
 </body>
 </html>

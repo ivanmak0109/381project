@@ -16,6 +16,10 @@
     <div class="container">
         <h1>Welcome, <%= userid %></h1>
         <p>Manage your bookings easily and efficiently.</p>
+        <form action="/search" method="POST">
+            Search by booking name: <input type="text" name= "search" required>
+            <input type="submit" value="Search">
+        </form>
         <h2>Bookings (<%= nBookings %>)</h2>
         <ul>
             <% if (bookings && bookings.length > 0) { %>
@@ -24,8 +28,8 @@
                         <a href="/details?_id=<%= b._id %>"><%= b.bookingname %></a>
                     </li>
                 <% } %>
-            <% } else { %>
-                <li>No bookings available.</li>
+            <% } else {  %>
+                <li>No bookings found</li>
             <% } %>
         </ul>
         <a href="/create" class="btn">Create Booking</a>
